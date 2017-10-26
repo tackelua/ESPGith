@@ -16,8 +16,9 @@ http://tinyurl.com/yd3zle46
 #include <BlynkSimpleEsp8266.h>
 
 #define DEBUG Serial
-#define DB(x) Serial.println(x)
-#define Db(x) Serial.print(x) 
+#define DB(x) DEBUG.println(x)
+#define Db(x) DEBUG.print(x) 
+
 #pragma endregion
 
 #pragma region VARIABLE
@@ -41,8 +42,8 @@ RCSwitch mySwitch = RCSwitch();
 //means the button is NOT pressed. (Assuming a normally open switch.)
 #define DEBOUNCE_MS 20     //A debounce time of 20 milliseconds usually works well for tactile button switches.
 
-#define PRESS_FOR_RESET			5000    //We define a "long press" to be 1000 milliseconds.
-#define PRESS_FOR_SMARTCONFIG	2000    //We define a "long press" to be 1000 milliseconds.
+#define PRESS_FOR_RESET			5000 
+#define PRESS_FOR_SMARTCONFIG	2000 
 Button myBtn(BUTTON, PULLUP, INVERT, DEBOUNCE_MS);
 //===========================================
 
@@ -50,12 +51,13 @@ Button myBtn(BUTTON, PULLUP, INVERT, DEBOUNCE_MS);
 // Go to the Project Settings (nut icon).
 
 //server Gith
-//char BLYNK_AUTH[] = "1ada1c7eb6c045cca3c6d560db92df4e";
-//char BLYNK_DOMAIN[] = "10.210.6.73";
+char BLYNK_AUTH[] = "1ada1c7eb6c045cca3c6d560db92df4e";
+char BLYNK_DOMAIN[] = "10.210.6.73";
 
 //server blynk
-char BLYNK_AUTH[] = "8069ddeca7ba4c08b33a98a50ee7d53d";
-char BLYNK_DOMAIN[] = "blynk-cloud.com";
+//char BLYNK_AUTH[] = "8069ddeca7ba4c08b33a98a50ee7d53d";
+//char BLYNK_DOMAIN[] = "blynk-cloud.com";
+
 int	 BLYNK_PORT = 8442;
 WidgetTerminal Terminal(V0);
 
@@ -115,7 +117,7 @@ void myBtn_run() {
 	myBtn.read();
 
 	if (myBtn.pressedFor(PRESS_FOR_SMARTCONFIG)) {
-		DB("Press long");
+		//DB("Press long");
 		wifi_smartConfig();
 	}
 }
@@ -131,9 +133,9 @@ typedef enum {
 	WIFIMULTI = 2
 } WiFi_Setup_Mode_t;
 void wifi_smartConfig() {
-	Serial.println(F("\r\n# SmartConfig started."));
+	//Serial.println(F("\r\n# SmartConfig started."));
 	WiFi.beginSmartConfig();
-	DB(F("Hi, you can enter wifi info via Serial. <SSID>|<Password>\r\nExample: GithAP|giathinh123"));
+	//DB(F("Hi, you can enter wifi info via //Serial. <SSID>|<Password>\r\nExample: GithAP|giathinh123"));
 	while (1) {
 		//delay(500);
 		delay(100);
@@ -145,7 +147,7 @@ void wifi_smartConfig() {
 		{
 			myBtn.read();
 			if (myBtn.pressedFor(PRESS_FOR_RESET)) {
-				DB(F("Reset"));
+				//DB(F("Reset"));
 				delay(100);
 				digitalWrite(0, HIGH);
 				digitalWrite(2, HIGH);
@@ -162,15 +164,16 @@ void wifi_smartConfig() {
 		}
 
 		if (WiFi.smartConfigDone()) {
-			Serial.println(F("SmartConfig: Success"));
+			//Serial.println(F("SmartConfig: Success"));
 			WiFi.printDiag(Serial);
 			if (WiFi.waitForConnectResult() == WL_CONNECTED) {
-				DB(F("connected"));
+				//DB(F("connected"));
 			}
 			WiFi.stopSmartConfig();
 			break;
 		}
 
+		/*
 		if (Serial.available()) {
 			String wifiInput = Serial.readString();
 			wifiInput.trim();
@@ -181,16 +184,16 @@ void wifi_smartConfig() {
 				WiFi.disconnect();
 				delay(100);
 				WiFi.begin(_ssid.c_str(), _pw.c_str());
-				Db(F("Connecting to "));
-				DB(_ssid);
-				Db(F("Password: "));
-				DB(_pw);
-				//DB(F("If connect success, ok. If fail, you must reset the board manually :D"));
+				//Db(F("Connecting to "));
+				//DB(_ssid);
+				//Db(F("Password: "));
+				//DB(_pw);
+				////DB(F("If connect success, ok. If fail, you must reset the board manually :D"));
 				if (WiFi.waitForConnectResult() == WL_CONNECTED) {
-					DB(F("Connected"""));
+					//DB(F("Connected"""));
 				}
 				else {
-					DB(F("Reset"));
+					//DB(F("Reset"));
 					ESP.restart();
 					delay(1000);
 				}
@@ -205,15 +208,16 @@ void wifi_smartConfig() {
 				//}
 			}
 			else {
-				DB(F("Syntax error, must have | between SSID and Password"));
+				//DB(F("Syntax error, must have '|' between SSID and Password"));
 			}
 		}
+		*/
 	}
 }
 void wifi_init(int mode) {
-	DB();
+	//DB();
 	WiFi.printDiag(Serial);
-	DB(F("\r\n# WiFi init"));
+	//DB(F("\r\n# WiFi init"));
 
 	WiFi.setAutoConnect(true);
 	WiFi.setAutoReconnect(true);
@@ -221,10 +225,10 @@ void wifi_init(int mode) {
 
 	if (WiFi.waitForConnectResult() == WL_CONNECTED)
 	{
-		DB(F("connected\n"));
+		//DB(F("connected\n"));
 	}
 	else {
-		DB(F("auto connect fail. Press button to config wifi"));
+		//DB(F("auto connect fail. Press button to config wifi"));
 	}
 
 	if (mode == NORMAL)
@@ -248,7 +252,7 @@ void wifi_init(int mode) {
 		WiFi.printDiag(Serial);
 		if (WiFi.waitForConnectResult() == WL_CONNECTED)
 		{
-			Serial.println(F("connected\n"));
+			//Serial.println(F("connected\n"));
 		}
 		else
 		{
@@ -263,10 +267,10 @@ void wifi_init(int mode) {
 		wifiMulti.addAP("Dingtea T2_sau", "133nguyenvanlinh");
 
 		if (wifiMulti.run() == WL_CONNECTED) {
-			Serial.println("");
-			Serial.println("WiFi connected");
-			Serial.println("IP address: ");
-			Serial.println(WiFi.localIP());
+			//Serial.println("");
+			//Serial.println("WiFi connected");
+			//Serial.println("IP address: ");
+			//Serial.println(WiFi.localIP());
 		}
 	}
 }
@@ -279,8 +283,8 @@ BLYNK_WRITE(V1) {
 	int buttonStt = param.asInt();
 	digitalWrite(R1, buttonStt);
 	//Blynk.virtualWrite(V11, buttonStt);
-	Db(F("#V1: "));
-	DB(buttonStt);
+	//Db(F("#V1: "));
+	//DB(buttonStt);
 	Terminal.print("#V1: ");
 	Terminal.println(buttonStt);
 	Terminal.flush();
@@ -289,8 +293,8 @@ BLYNK_WRITE(V2) {
 	int buttonStt = param.asInt();
 	digitalWrite(R2, buttonStt);
 	//Blynk.virtualWrite(V12, buttonStt);
-	Db(F("#V2: "));
-	DB(buttonStt);
+	//Db(F("#V2: "));
+	//DB(buttonStt);
 	Terminal.print("#V2: ");
 	Terminal.println(buttonStt);
 	Terminal.flush();
@@ -299,8 +303,8 @@ BLYNK_WRITE(V3) {
 	int buttonStt = param.asInt();
 	digitalWrite(R3, buttonStt);
 	//Blynk.virtualWrite(V13, buttonStt);
-	Db(F("#V3: "));
-	DB(buttonStt);
+	//Db(F("#V3: "));
+	//DB(buttonStt);
 	Terminal.print("#V3: ");
 	Terminal.println(buttonStt);
 	Terminal.flush();
@@ -309,8 +313,8 @@ BLYNK_WRITE(V4) {
 	int buttonStt = param.asInt();
 	digitalWrite(R4, buttonStt);
 	//Blynk.virtualWrite(V14, buttonStt);
-	Db(F("#V4: "));
-	DB(buttonStt);
+	//Db(F("#V4: "));
+	//DB(buttonStt);
 	Terminal.print("#V4: ");
 	Terminal.println(buttonStt);
 	Terminal.flush();
@@ -319,8 +323,8 @@ BLYNK_WRITE(V5) {
 	int buttonStt = param.asInt();
 	digitalWrite(R5, !buttonStt);
 	//Blynk.virtualWrite(V15, !buttonStt);
-	Db(F("#V5: "));
-	DB(!buttonStt);
+	//Db(F("#V5: "));
+	//DB(!buttonStt);
 	Terminal.print("#V5: ");
 	Terminal.println(!buttonStt);
 	Terminal.flush();
@@ -346,8 +350,8 @@ BLYNK_WRITE(V6) {
 	Blynk.virtualWrite(V3, buttonStt);
 	Blynk.virtualWrite(V4, buttonStt);
 	Blynk.virtualWrite(V5, buttonStt);
-	Db(F("#V6: "));
-	DB(buttonStt);
+	//Db(F("#V6: "));
+	//DB(buttonStt);
 	Terminal.print("#V6: ");
 	Terminal.println(buttonStt);
 	Terminal.flush();
@@ -359,54 +363,71 @@ BLYNK_WRITE(V6) {
 
 #pragma region RC SWITCH CONTROLLING
 void RCSwitch_run() {
-	if (mySwitch.available()) {
-		int value = mySwitch.getReceivedValue();
+	static ulong t = millis();
+	if (millis() - t > 100) {
+		t = millis();
+		if (mySwitch.available()) {
+			int value = mySwitch.getReceivedValue();
+			//DB(value);
+			if (value == 8206272) { //A
+				bool stt = digitalRead(R1);
+				digitalWrite(R1, !stt);
+				if (WiFi.isConnected()) {
+					Blynk.virtualWrite(V1, !stt);	Blynk.run();
+				}
+			}
+			else if (value == 8206128) { //B
+				bool stt = digitalRead(R2);
+				digitalWrite(R2, !stt);
+				if (WiFi.isConnected()) {
+					Blynk.virtualWrite(V2, !stt);	Blynk.run();
+				}
+			}
+			else if (value == 8206092) { //C
+				bool stt = digitalRead(R3);
+				digitalWrite(R3, !stt);
+				if (WiFi.isConnected()) {
+					Blynk.virtualWrite(V3, !stt);	Blynk.run();
+				}
+			}
+			else if (value == 8206083) { //D
+				bool stt = digitalRead(R4);
+				digitalWrite(R4, !stt);
+				if (WiFi.isConnected()) {
+					Blynk.virtualWrite(V4, !stt);	Blynk.run();
+				}
+			}
+			else if (value == 8206284) { //AC
+				bool stt = digitalRead(R5);
+				digitalWrite(R5, !stt);
+				if (WiFi.isConnected()) {
+					Blynk.virtualWrite(V5, !stt);	Blynk.run();
+				}
+			}
+			else if (value == 8206275) { //AD
+				bool stt1 = digitalRead(R1);
+				bool stt2 = digitalRead(R2);
+				bool stt3 = digitalRead(R3);
+				bool stt4 = digitalRead(R4);
+				bool stt5 = digitalRead(R5);
+				digitalWrite(R1, !stt1);
+				digitalWrite(R2, !stt2);
+				digitalWrite(R3, !stt3);
+				digitalWrite(R4, !stt4);
+				digitalWrite(R5, !stt5);
 
-		if (value == 5592512) { //A
-			bool stt = digitalRead(R1);
-			digitalWrite(R1, !stt);
-			Blynk.virtualWrite(V1, !stt);
-		}
-		else if (value == 5592368) { //B
-			bool stt = digitalRead(R2);
-			digitalWrite(R2, !stt);
-			Blynk.virtualWrite(V2, !stt);
-		}
-		else if (value == 5592332) { //C
-			bool stt = digitalRead(R3);
-			digitalWrite(R3, !stt);
-			Blynk.virtualWrite(V3, !stt);
-		}
-		else if (value == 5592323) { //D
-			bool stt = digitalRead(R4);
-			digitalWrite(R4, !stt);
-			Blynk.virtualWrite(V4, !stt);
-		}
-		else if (value == 5592524) { //AC
-			bool stt = digitalRead(R5);
-			digitalWrite(R5, !stt);
-			Blynk.virtualWrite(V5, !stt);
-		}
-		else if (value == 5592515) { //AD
-			bool stt1 = digitalRead(R1);
-			bool stt2 = digitalRead(R2);
-			bool stt3 = digitalRead(R3);
-			bool stt4 = digitalRead(R4);
-			bool stt5 = digitalRead(R5);
-			digitalWrite(R1, !stt1);
-			digitalWrite(R2, !stt2);
-			digitalWrite(R3, !stt3);
-			digitalWrite(R4, !stt4);
-			digitalWrite(R5, !stt5);
+				if (WiFi.isConnected()) {
+					Blynk.run();
+					Blynk.virtualWrite(V1, !stt1);	Blynk.run();
+					Blynk.virtualWrite(V2, !stt2);	Blynk.run();
+					Blynk.virtualWrite(V3, !stt3);	Blynk.run();
+					Blynk.virtualWrite(V4, !stt4);	Blynk.run();
+					Blynk.virtualWrite(V5, !stt5);	Blynk.run();
+				}
+			}
 
-			Blynk.virtualWrite(V1, !stt1);
-			Blynk.virtualWrite(V2, !stt2);
-			Blynk.virtualWrite(V3, !stt3);
-			Blynk.virtualWrite(V4, !stt4);
-			Blynk.virtualWrite(V5, !stt5);
+			mySwitch.resetAvailable();
 		}
-
-		mySwitch.resetAvailable();
 	}
 }
 #pragma endregion
@@ -417,8 +438,8 @@ void RCSwitch_run() {
 void setup()
 {
 	delay(100);
-	Serial.begin(74880);
-	Serial.setTimeout(50);
+	//Serial.begin(74880);
+	//Serial.setTimeout(50);
 
 	pinMode(R1, OUTPUT);
 	pinMode(R2, OUTPUT);
@@ -434,11 +455,11 @@ void setup()
 
 	//Blynk.config(BLYNK_AUTH, "blynk-cloud.com", 8442);
 	Blynk.config(BLYNK_AUTH, BLYNK_DOMAIN, BLYNK_PORT);
-	Serial.println(F("Connect to Blynk server"));
+	//Serial.println(F("Connect to Blynk server"));
 
 	Blynk.connect();
 	//while ((wifiMulti.run() != WL_CONNECTED) && (!Blynk.connect())) {
-	//	Serial.print(F("."));
+	//	//Serial.print(F("."));
 	//	delay(50);
 	//}
 
@@ -451,6 +472,13 @@ void loop()
 	//	delay(1);
 	//	return;
 	//}
+	//ulong t = millis();
+
+	static bool loop1st = false;
+	if (!loop1st) {
+		loop1st = true;
+		//DB("Loop running");
+	}
 	if (WiFi.isConnected()) {
 		led_run(ON);
 	}
@@ -460,8 +488,11 @@ void loop()
 
 	Blynk.run();
 	RCSwitch_run();
+	Blynk.run();
 	myBtn_run();
+	Blynk.run();
 	delay(1);
+	////DB(millis() - t);
 }
 #pragma endregion
 
