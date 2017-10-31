@@ -133,9 +133,9 @@ typedef enum {
 	WIFIMULTI = 2
 } WiFi_Setup_Mode_t;
 void wifi_smartConfig() {
-	//Serial.println(F("\r\n# SmartConfig started."));
+	Serial.println(F("\r\n# SmartConfig started."));
 	WiFi.beginSmartConfig();
-	//DB(F("Hi, you can enter wifi info via //Serial. <SSID>|<Password>\r\nExample: GithAP|giathinh123"));
+	//DB(F("Hi, you can enter wifi info via Serial. <SSID>|<Password>\r\nExample: GithAP|giathinh123"));
 	while (1) {
 		//delay(500);
 		delay(100);
@@ -164,7 +164,7 @@ void wifi_smartConfig() {
 		}
 
 		if (WiFi.smartConfigDone()) {
-			//Serial.println(F("SmartConfig: Success"));
+			Serial.println(F("SmartConfig: Success"));
 			WiFi.printDiag(Serial);
 			if (WiFi.waitForConnectResult() == WL_CONNECTED) {
 				//DB(F("connected"));
@@ -173,7 +173,7 @@ void wifi_smartConfig() {
 			break;
 		}
 
-		/*
+		
 		if (Serial.available()) {
 			String wifiInput = Serial.readString();
 			wifiInput.trim();
@@ -211,7 +211,7 @@ void wifi_smartConfig() {
 				//DB(F("Syntax error, must have '|' between SSID and Password"));
 			}
 		}
-		*/
+		
 	}
 }
 void wifi_init(int mode) {
@@ -252,7 +252,7 @@ void wifi_init(int mode) {
 		WiFi.printDiag(Serial);
 		if (WiFi.waitForConnectResult() == WL_CONNECTED)
 		{
-			//Serial.println(F("connected\n"));
+			Serial.println(F("connected\n"));
 		}
 		else
 		{
@@ -267,10 +267,10 @@ void wifi_init(int mode) {
 		wifiMulti.addAP("Dingtea T2_sau", "133nguyenvanlinh");
 
 		if (wifiMulti.run() == WL_CONNECTED) {
-			//Serial.println("");
-			//Serial.println("WiFi connected");
-			//Serial.println("IP address: ");
-			//Serial.println(WiFi.localIP());
+			Serial.println("");
+			Serial.println("WiFi connected");
+			Serial.println("IP address: ");
+			Serial.println(WiFi.localIP());
 		}
 	}
 }
@@ -438,8 +438,8 @@ void RCSwitch_run() {
 void setup()
 {
 	delay(100);
-	//Serial.begin(74880);
-	//Serial.setTimeout(50);
+	Serial.begin(74880);
+	Serial.setTimeout(50);
 
 	pinMode(R1, OUTPUT);
 	pinMode(R2, OUTPUT);
@@ -455,11 +455,11 @@ void setup()
 
 	//Blynk.config(BLYNK_AUTH, "blynk-cloud.com", 8442);
 	Blynk.config(BLYNK_AUTH, BLYNK_DOMAIN, BLYNK_PORT);
-	//Serial.println(F("Connect to Blynk server"));
+	Serial.println(F("Connect to Blynk server"));
 
 	Blynk.connect();
 	//while ((wifiMulti.run() != WL_CONNECTED) && (!Blynk.connect())) {
-	//	//Serial.print(F("."));
+	//	Serial.print(F("."));
 	//	delay(50);
 	//}
 
